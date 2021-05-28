@@ -2,7 +2,7 @@
 
 class ExtCLI extends ExtAbstract
 {
-
+    //parsing algorithm for CLI ext
     public function parseFile($file, $dir){
         $arr_res = [];
         $ext = $this->getExtension($file);
@@ -34,5 +34,12 @@ class ExtCLI extends ExtAbstract
             }
             return $arr_res;
         }
+    }
+
+    //parse TR~1Z0000020300000002 to
+    //array ('TR' => '1Z0000020300000002')
+    private function getData($data_str_value){
+        $arr_data = explode("~", $data_str_value);
+        return [$arr_data[0], $arr_data[1]];
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-class Parse
+class Parser
 {
-    public $dir;
+    protected $dir;
     protected $arr_files = array();
 
     public function __construct($dir){
@@ -10,24 +10,27 @@ class Parse
         $this->getFiles($this->dir);
     }
 
+    //initiates the parser
     public function doParse(){
         foreach ($this->arr_files as $file){
+            $extParser = 0;
             $ext = $this->getExtension($file);
             echo $file . ": ";
             switch ($ext) {
                 case "CLI":
-                    $cli = new ExtCLI();
-                    $arr_result = $cli->parseFile($file, $this->dir);
+                    $extParser = new ExtCLI();
                     break;
                 default: echo ': extension not supported' . PHP_EOL;
             }
-            if($arr_result){
+            if(!empty($extParser)){
+                $arr_result = $extParser->parseFile($file, $this->dir);
                 $query = $this->generateQuery($arr_result);
                 echo PHP_EOL . $query;
             }
         }
     }
 
+    //get files array from directory
     protected function getFiles($dir){
 
         if (is_dir($dir)) {
@@ -45,8 +48,9 @@ class Parse
             echo "directory doesn't exist." .PHP_EOL;
         }
     }
-    
-    protected function generateQuery($arr_result){
+
+    // generate SQL query
+    private function generateQuery($arr_result){
 
         $arr_result = $this->prepareArray($arr_result);
 
@@ -57,13 +61,8 @@ class Parse
         return $query;
     }
 
-    //parse ext from file name
-    protected function getExtension($file) {
-        return substr($file, strrpos($file, '.') + 1);
-    }
-
     //this function prepare data from result array for generate sql query
-    protected function prepareArray($arr_result) {
+    private function prepareArray($arr_result) {
         $keys = ['TR', 'SH', 'PD', 'DD', 'ST'];
 
         foreach ($arr_result as $result) {
@@ -85,5 +84,10 @@ class Parse
         }
 
         return $ready_arr_result;
+    }
+
+    //parse ext from file name
+    private function getExtension($file) {
+        return substr($file, strrpos($file, '.') + 1);
     }
 }

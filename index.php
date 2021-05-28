@@ -9,6 +9,6 @@ echo "Enter relative path to the directory with the data files:" .PHP_EOL;
 echo __DIR__ . "\\";
 $dir = (string)readline();
 
-$parser = new Parse($dir);
-echo $parser->doParse();
-//$parser->doParse();
+//call Parser class
+$parser = new Parser($dir);
+$parser->doParse();
