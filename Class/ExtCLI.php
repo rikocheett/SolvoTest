@@ -34,6 +34,7 @@ class ExtCLI extends ExtAbstract
             }
             return $arr_res;
         }
+        else return false;
     }
 
     //parse TR~1Z0000020300000002 to
